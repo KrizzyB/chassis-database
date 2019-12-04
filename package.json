@@ -1,0 +1,15 @@
+{
+  "name": "chassis-database",
+  "version": "0.0.1",
+  "description": "Mongoose wrapper module for the Chassis bootstrapper",
+  "main": "database.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kris Sinclair",
+  "repository": "https://github.com/KrizzyB/chassis-database",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^5.7.13"
+  }
+}
