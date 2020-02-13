@@ -7,7 +7,7 @@ class Database {
      * @param {Function} callback
      * @param {Object} [options]
      */
-    static init(callback, options = config.db) {
+    static init(callback, options = config.getDataByKey("db")) {
         if (!options) {
             callback({message: "Cannot connect to database, no configuration found."});
         } else {
