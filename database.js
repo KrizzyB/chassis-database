@@ -48,6 +48,10 @@ class Database {
         return mongoose;
     }
 
+    static getAbstractModel() {
+        return require("./model/abstract/modelAbstract");
+    }
+
     static getReadyState() {
         return mongoose.connection.readyState;
     }
