@@ -1,8 +1,9 @@
 const DB = require("../../database");
 
 class modelAbstract {
-    constructor(model) {
+    constructor(model, childClass) {
         this.model = model;
+        this.childClass = childClass
         this.dbNotConnectedErr = {message: "No database connection established."}
     }
 
@@ -11,12 +12,12 @@ class modelAbstract {
             let self = this;
             let query = {};
             query[id] = self[id];
-            self.getOne(query, function(err, _item) {
+            this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
-                    if (!_item[id]) {
-                        this.model.create(self, callback);
+                    if (!_item) {
+                        self.model.create(self, callback);
                     }
                 }
             });
@@ -30,12 +31,12 @@ class modelAbstract {
             let self = this;
             let query = {};
             query[id] = self[id];
-            self.getOne(query, function(err, _item) {
+            this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
                     if (_item) {
-                        this.model.updateOne(query, self, callback);
+                        self.model.updateOne(query, self, callback);
                     }
                 }
             });
@@ -49,14 +50,14 @@ class modelAbstract {
             let self = this;
             let query = {};
             query[id] = self[id];
-            self.getOne(query, function(err, _item) {
+            this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
                     if (_item) {
-                        this.model.updateOne(query, self, callback);
+                        self.model.updateOne(query, self, callback);
                     } else {
-                        this.model.create(self, callback);
+                        self.model.create(self, callback);
                     }
                 }
             });
@@ -93,4 +94,15 @@ class modelAbstract {
     static delete(items, callback) {
         DB.transaction(items, "delete", callback);
     }
+
+    static new(items) {
+        let self = this;
+        let _return = [];
+        for (let i=0; i<items.length; i++) {
+            _return.push(new self(items[i]));
+        }
+        return _return;
+    }
 }
+
+module.exports = modelAbstract;
