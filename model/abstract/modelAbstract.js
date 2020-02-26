@@ -99,7 +99,7 @@ class modelAbstract {
         return _return;
     }
 
-    getDBNotConnectedError() {
+    static getDBNotConnectedError() {
         return {message: "No database connection established."};
     }
 }
