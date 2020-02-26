@@ -3,20 +3,18 @@ const DB = require("../../database");
 class modelAbstract {
     constructor(model, childClass) {
         this.model = model;
-        this.childClass = childClass
-        this.dbNotConnectedErr = {message: "No database connection established."}
+        this.childClass = childClass;
     }
 
     create(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
-            let query = {};
-            query[id] = self[id];
+            let query = generateQuery(self, id);
             this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
-                    if (!_item) {
+                    if (!_item || id == null) {
                         self.model.create(self, callback);
                     }
                 }
@@ -29,8 +27,7 @@ class modelAbstract {
     update(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
-            let query = {};
-            query[id] = self[id];
+            let query = generateQuery(self, id);
             this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
@@ -48,8 +45,7 @@ class modelAbstract {
     save(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
-            let query = {};
-            query[id] = self[id];
+            let query = generateQuery(self, id);
             this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
@@ -69,8 +65,7 @@ class modelAbstract {
     delete(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
-            let query = {};
-            query[id] = self[id];
+            let query = generateQuery(self, id);
             self.deleteOne(query, function(err, result) {
                 callback(err, result);
             });
@@ -103,6 +98,21 @@ class modelAbstract {
         }
         return _return;
     }
+
+    getDBNotConnectedError() {
+        return {message: "No database connection established."};
+    }
+}
+
+function generateQuery(self, id) {
+    let query = {};
+    if (id) {
+        query[id] = self[id];
+    } else {
+        query = null;
+    }
+
+    return query;
 }
 
 module.exports = modelAbstract;
