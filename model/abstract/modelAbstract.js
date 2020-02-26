@@ -16,6 +16,8 @@ class modelAbstract {
                 } else {
                     if (!_item || id == null) {
                         self.model.create(self, callback);
+                    } else {
+                        callback({message: "Item already exists with " + id + " " + self[id]})
                     }
                 }
             });
@@ -34,6 +36,8 @@ class modelAbstract {
                 } else {
                     if (_item) {
                         self.model.updateOne(query, self, callback);
+                    } else {
+                        callback({message: "No item exists with " + id + " " + self[id]})
                     }
                 }
             });
@@ -43,7 +47,6 @@ class modelAbstract {
     }
 
     save(callback, id = "id") {
-        let self = this;
         if (DB.getReadyState()) {
             let self = this;
             let query = generateQuery(self, id);

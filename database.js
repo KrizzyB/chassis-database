@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const logModule = "chassis-database";
+
 class Database {
     /**
      * Initialise database connection.
@@ -12,12 +14,12 @@ class Database {
             callback({message: "Cannot connect to database, no configuration found."});
         } else {
             if (!mongoose.connection.readyState) {  //disconnected
-                Log.info("Initialising database connection...");
+                Log.info("Initialising database connection...", logModule);
                 connect(function(err, DB) {
                     if (err) {
                         callback(err);
                     } else {
-                        Log.info("Established database connection.");
+                        Log.info("Established database connection.", logModule);
                         callback(null, DB);
                     }
                 }, options);
@@ -30,7 +32,7 @@ class Database {
             }
 
             function wait(i) {
-                Log.info("Waiting for database to complete initialisation...");
+                Log.info("Waiting for database to complete initialisation...", logModule);
                 setTimeout(function() {
                     if (i < 5) {
                         if (mongoose.connection.readyState) {
@@ -46,6 +48,10 @@ class Database {
 
     static getMongoose() {
         return mongoose;
+    }
+
+    static getModel() {
+
     }
 
     static getAbstractModel() {
