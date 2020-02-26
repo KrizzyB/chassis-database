@@ -1,6 +1,6 @@
 {
   "name": "chassis-database",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Mongoose wrapper module for the Chassis bootstrapper",
   "main": "database.js",
   "scripts": {

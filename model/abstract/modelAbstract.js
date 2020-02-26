@@ -20,7 +20,7 @@ class modelAbstract {
                 }
             });
         } else {
-            callback(this.dbNotConnectedErr);
+            callback(modelAbstract.getDBNotConnectedError());
         }
     }
 
@@ -38,11 +38,12 @@ class modelAbstract {
                 }
             });
         } else {
-            callback(this.dbNotConnectedErr);
+            callback(modelAbstract.getDBNotConnectedError());
         }
     }
 
     save(callback, id = "id") {
+        let self = this;
         if (DB.getReadyState()) {
             let self = this;
             let query = generateQuery(self, id);
@@ -58,7 +59,7 @@ class modelAbstract {
                 }
             });
         } else {
-            callback(this.dbNotConnectedErr);
+            callback(modelAbstract.getDBNotConnectedError());
         }
     }
 
@@ -70,7 +71,7 @@ class modelAbstract {
                 callback(err, result);
             });
         } else {
-            callback(this.dbNotConnectedErr);
+            callback(modelAbstract.getDBNotConnectedError());
         }
     }
 
