@@ -107,8 +107,9 @@ function connect(callback, options) {
     options.keepAlive = options.keepAlive ? options.keepAlive : true;
     options.poolSize = options.poolSize ? options.poolSize : 5;
     options.useNewUrlParser = options.useNewUrlParser ? options.useNewUrlParser : true;
+    options.useUnifiedTopology = options.useUnifiedTopology ? options.useUnifiedTopology : true;
 
-    mongoose.connect("mongodb://" + options.host + ":" + options.port + "/" + options.dbName + "?authSource=" + options.authSource, options);
+    mongoose.connect("mongodb://" + options.host + ":" + options.port + "/" + options.dbName + "?authSource=" + options.authSource, stripUnsupportedOptions(options));
     let DB = mongoose.connection;
 
     DB.on("error", function (err) {
@@ -118,6 +119,20 @@ function connect(callback, options) {
     DB.once("open", function () {
         callback(null, DB);
     });
+}
+
+/**
+ * Strips unsupported options from the options object before passing to the Mongo client.
+ * This prevents annoying warnings in the console.
+ *
+ * @param {Object} options
+ */
+function stripUnsupportedOptions(options) {
+    let _options = {...options};
+    delete _options.host;
+    delete _options.port;
+
+    return _options;
 }
 
 module.exports = Database;
