@@ -9,7 +9,10 @@ class Database {
      * @param {Function} callback
      * @param {Object} [options]
      */
-    static init(callback, options = config.getConfigByID("db").data) {
+    static init(callback, options) {
+        let _config = config.getConfigByID("db");
+        options = _config ? _config.data : undefined;
+
         if (!options) {
             callback({message: "Cannot connect to database, no configuration found."});
         } else {
