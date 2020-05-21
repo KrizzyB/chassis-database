@@ -29,12 +29,15 @@ class modelAbstract {
     update(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
+            delete self["_id"]; //remove ObjectID to prevent key issues in MongoDB
+            delete self["createDate"]; //remove createDate to prevent overriding date in database
             let query = generateQuery(self, id);
             this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
                     if (_item) {
+                        self["updateDate"] = new Date();    //add date when updated
                         self.model.updateOne(query, self, callback);
                     } else {
                         callback({message: "No item exists with " + id + " " + self[id]})
@@ -49,12 +52,15 @@ class modelAbstract {
     save(callback, id = "id") {
         if (DB.getReadyState()) {
             let self = this;
+            delete self["_id"]; //remove ObjectID to prevent key issues in MongoDB
+            delete self["createDate"]; //remove createDate to prevent overriding date in database
             let query = generateQuery(self, id);
             this.childClass.getOne(query, function(err, _item) {
                 if (err) {
                     callback(err);
                 } else {
                     if (_item) {
+                        self["updateDate"] = new Date();    //add date when updated
                         self.model.updateOne(query, self, callback);
                     } else {
                         self.model.create(self, callback);
