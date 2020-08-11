@@ -76,7 +76,7 @@ class modelAbstract {
         if (DB.getReadyState()) {
             let self = this;
             let query = generateQuery(self, id);
-            self.deleteOne(query, function(err, result) {
+            self.model.deleteOne(query, function(err, result) {
                 callback(err, result);
             });
         } else {
